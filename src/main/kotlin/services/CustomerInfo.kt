@@ -1,7 +1,6 @@
 package services
 
 import model.Customer
-import java.util.Objects
 
 class CustomerInfo {
     companion object{

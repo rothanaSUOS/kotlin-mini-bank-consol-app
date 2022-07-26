@@ -9,10 +9,7 @@ private var accountSecretKey : String? = null
 
 fun appManu() {
     services.AppMenu.show()
-
-    print("Input menu Number: ")
-    var menuOption: String? = readLine()
-    when (menuOption) {
+    when (services.InputField.input("Input Customer menu: ")) {
          "1" -> customerAccount()
          "2" -> transferFund()
          "3" -> listTransactionHistory()
@@ -21,17 +18,14 @@ fun appManu() {
     }
 }
 
-fun main(args: Array<String>) {
+fun main() {
     appManu()
 }
 
 
 fun customerAccount() {
     services.AppMenu.customerMenu()
-
-    print("Input Customer menu: ")
-    var customerMenu : String? = readLine()
-    when (customerMenu) {
+    when (services.InputField.input("Input Customer menu: ")) {
         "1" -> registerAccount()
         "2" -> listAccount()
         "3" -> appManu()
@@ -40,7 +34,7 @@ fun customerAccount() {
 }
 
 fun registerAccount() {
-    var newCustomer = services.Register.registerAccount()
+    val newCustomer = services.Register.registerAccount()
 
     listCustomer.add(newCustomer)
 
@@ -67,15 +61,20 @@ fun transferFund() {
         print("Amount: ")
         val amount : String? = readLine()
 
-        val isValidAmount = listCustomer.filter { it.Account == accountNumber }[0].Balance
+        val customerByAccount = listCustomer.filter { it.Account == destinationAccount }
 
-        val customerByAccount = listCustomer.filter { it.Account == destinationAccount }[0]
-        if (customerByAccount != null && amount?.toInt()!! <= isValidAmount!! && destinationAccount != accountNumber) {
-            listCustomer!!.find { it.Account == destinationAccount }!!.Balance = listCustomer!!.find { it.Account == destinationAccount }!!.Balance?.plus(
-                amount!!.toInt()!!
+        val isValidAmount = if(customerByAccount.isNotEmpty()) {
+            listCustomer.filter { it.Account == accountNumber }[0].Balance
+        } else {
+            0
+        }
+
+        if (customerByAccount.isNotEmpty() && (amount?.toInt()!! <= isValidAmount!!) && (destinationAccount != accountNumber)) {
+            listCustomer.find { it.Account == destinationAccount }!!.Balance = listCustomer.find { it.Account == destinationAccount }!!.Balance?.plus(
+                amount.toInt()
             )
-            listCustomer!!.find { it.Account == accountNumber }!!.Balance = listCustomer!!.find { it.Account == accountNumber }!!.Balance?.minus(
-                amount!!.toInt()!!
+            listCustomer.find { it.Account == accountNumber }!!.Balance = listCustomer.find { it.Account == accountNumber }!!.Balance?.minus(
+                amount.toInt()
             )
             println("Transfer successfully.")
             val transaction = TransactionHistory(accountNumber, destinationAccount, amount.toInt())
@@ -84,25 +83,24 @@ fun transferFund() {
                     "\n| 1. See balance                       |" +
                     "\n| 2. Back                              |" +
                     "\n======================================")
-            var menu : String? = readLine()
-            if(menu == "1") {
+
+            if(services.InputField.input("Input Customer menu: ") == "1") {
                 checkBalance()
                 appManu()
             } else {
                 appManu()
             }
         } else {
-            when(accountNumber) {
-                destinationAccount -> println("You can't send to your own account.")
-                null -> println("Invalid Destination account number.")
-                else -> println("Your Amount is insufficient.")
+            when {
+                accountNumber == destinationAccount -> println("You can't send to your own account.")
+                accountNumber == null -> println("Invalid Destination account number.")
+                customerByAccount.isNotEmpty() -> println("Your Amount is insufficient.")
             }
             println("============ Select menu =============" +
                     "\n| 1. Try Again                       |" +
                     "\n| 2. Back                            |" +
                     "\n======================================")
-            var menu : String? = readLine()
-            if(menu == "1") {
+            if(services.InputField.input("Input number menu: ") == "1") {
                 transferFund()
             } else {
                 appManu()
@@ -114,20 +112,20 @@ fun transferFund() {
     }
 }
 fun checkBalance() {
-    println("Your balance is: " + listCustomer!!.find { it.Account == accountNumber }!!.Balance.toString())
+    println("Your balance is: " + listCustomer.find { it.Account == accountNumber }!!.Balance.toString())
 }
 fun login() {
     println(" Please Log in your account.")
     print("Please input your secret key to log in: ")
     val secretKey : String = readLine()!!
-    val customerBySecretKey = listCustomer.filter { it.secretkey == secretKey }[0]
-    if (customerBySecretKey == null) {
+    val customerBySecretKey = listCustomer.filter { it.secretkey == secretKey }
+    if (customerBySecretKey.isEmpty()) {
         println("Sorry your account $secretKey is not exist.")
     } else {
         println("login Successfully.")
         isAuth = true
-        accountNumber = customerBySecretKey.Account.toString()
-        accountSecretKey = customerBySecretKey.secretkey.toString()
+        accountNumber = customerBySecretKey[0].Account.toString()
+        accountSecretKey = customerBySecretKey[0].secretkey.toString()
     }
 }
 
@@ -135,7 +133,7 @@ fun listTransactionHistory() {
     if(isAuth){
         val accountTransaction = transactionHistory.filter { it.FromAccount == accountNumber || it.ToAccount == accountNumber }
 
-        if(accountTransaction != null) {
+        if(accountTransaction.isNotEmpty()) {
             services.HistoryList.show(accountTransaction)
             appManu()
         } else {
@@ -154,8 +152,8 @@ fun topUp() {
         print("Input Amount: ")
         val amount : String? = readLine()
 
-        listCustomer!!.find { it.Account == accountNumber }!!.Balance = listCustomer!!.find { it.Account == accountNumber }!!.Balance?.plus(
-            amount!!.toInt()!!
+        listCustomer.find { it.Account == accountNumber }!!.Balance = listCustomer.find { it.Account == accountNumber }!!.Balance?.plus(
+            amount!!.toInt()
         )
         println("Top up successfully.")
         checkBalance()

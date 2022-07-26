@@ -23,7 +23,7 @@ class Register {
                 println("Your date of birth is invalid format!")
                 dateOfBirth = services.InputField.input("Date of birth(dd-MM-yyyy): ").toString()
             }
-            var validBd = LocalDate.parse(services.InputField.input("Date of birth(dd-MM-yyyy): ").toString(), dateFormat)
+            var validBd = LocalDate.parse(dateOfBirth, dateFormat)
 
             var account = services.InputField.input("Account: ")
             var balance = services.InputField.input("Balance: ")?.toIntOrNull()

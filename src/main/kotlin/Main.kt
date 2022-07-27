@@ -56,24 +56,21 @@ fun listAccount() {
 
 fun transferFund() {
     if(isAuth){
-        print("Destiny Account number: ")
-        val destinationAccount : String? = readLine()
-        print("Amount: ")
-        val amount : String? = readLine()
-
-        val customerByAccount = listCustomer.filter { it.Account == destinationAccount }
+        val destinationAccount = services.InputField.input("Destiny Account number: ")
+        val amount = services.InputField.input("Amount: ")
+        val customerByAccount = listCustomer.filter { it.account == destinationAccount }
 
         val isValidAmount = if(customerByAccount.isNotEmpty()) {
-            listCustomer.filter { it.Account == accountNumber }[0].Balance
+            listCustomer.filter { it.account == accountNumber }[0].balance
         } else {
             0
         }
 
         if (customerByAccount.isNotEmpty() && (amount?.toInt()!! <= isValidAmount!!) && (destinationAccount != accountNumber)) {
-            listCustomer.find { it.Account == destinationAccount }!!.Balance = listCustomer.find { it.Account == destinationAccount }!!.Balance?.plus(
+            listCustomer.find { it.account == destinationAccount }!!.balance = listCustomer.find { it.account == destinationAccount }!!.balance?.plus(
                 amount.toInt()
             )
-            listCustomer.find { it.Account == accountNumber }!!.Balance = listCustomer.find { it.Account == accountNumber }!!.Balance?.minus(
+            listCustomer.find { it.account == accountNumber }!!.balance = listCustomer.find { it.account == accountNumber }!!.balance?.minus(
                 amount.toInt()
             )
             println("Transfer successfully.")
@@ -112,26 +109,25 @@ fun transferFund() {
     }
 }
 fun checkBalance() {
-    println("Your balance is: " + listCustomer.find { it.Account == accountNumber }!!.Balance.toString())
+    println("Your balance is: " + listCustomer.find { it.account == accountNumber }!!.balance.toString())
 }
 fun login() {
-    println(" Please Log in your account.")
-    print("Please input your secret key to log in: ")
-    val secretKey : String = readLine()!!
+    println("Please Log in your account.")
+    val secretKey = services.InputField.input("Please input your secret key to log in: ")
     val customerBySecretKey = listCustomer.filter { it.secretkey == secretKey }
     if (customerBySecretKey.isEmpty()) {
         println("Sorry your account $secretKey is not exist.")
     } else {
         println("login Successfully.")
         isAuth = true
-        accountNumber = customerBySecretKey[0].Account.toString()
+        accountNumber = customerBySecretKey[0].account.toString()
         accountSecretKey = customerBySecretKey[0].secretkey.toString()
     }
 }
 
 fun listTransactionHistory() {
     if(isAuth){
-        val accountTransaction = transactionHistory.filter { it.FromAccount == accountNumber || it.ToAccount == accountNumber }
+        val accountTransaction = transactionHistory.filter { it.fromAccount == accountNumber || it.toAccount == accountNumber }
 
         if(accountTransaction.isNotEmpty()) {
             services.HistoryList.show(accountTransaction)
@@ -149,10 +145,9 @@ fun listTransactionHistory() {
 fun topUp() {
     if(isAuth) {
         println("How much you want to top up?")
-        print("Input Amount: ")
-        val amount : String? = readLine()
+        val amount = services.InputField.input("Input Amount: ")
 
-        listCustomer.find { it.Account == accountNumber }!!.Balance = listCustomer.find { it.Account == accountNumber }!!.Balance?.plus(
+        listCustomer.find { it.account == accountNumber }!!.balance = listCustomer.find { it.account == accountNumber }!!.balance?.plus(
             amount!!.toInt()
         )
         println("Top up successfully.")

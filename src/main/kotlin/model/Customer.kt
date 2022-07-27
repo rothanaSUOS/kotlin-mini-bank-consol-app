@@ -7,11 +7,11 @@ enum class Gender {
 }
 
 data class Customer(
-    var Name: String?,
-    var Gender: Gender,
-    var DateOfBirth: LocalDate?,
-    var Account: String?,
-    var Balance: Int?,
+    var name: String?,
+    var gender: Gender,
+    var dateOfBirth: LocalDate?,
+    var account: String?,
+    var balance: Int?,
     var secretkey: String?,
-    var Address: Address
+    var address: Address
 )

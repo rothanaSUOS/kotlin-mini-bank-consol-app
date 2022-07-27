@@ -7,12 +7,12 @@ class CustomerInfo {
     companion object{
         fun show(item : Customer) {
             println("========== Customer info ==========" +
-                    "\n| Name: ${item.Name}                   " +
-                    "\n| Gender: ${item.Gender}               " +
-                    "\n| Date Of Birth: ${item.DateOfBirth?.toString(pattern = "dd-MM-yyyy")}   " +
-                    "\n| Account: ${item.Account}           " +
-                    "\n| Balance: ${item.Balance}            " +
-                    "\n| Address: ${item.Address}           " +
+                    "\n| Name: ${item.name}                   " +
+                    "\n| Gender: ${item.gender}               " +
+                    "\n| Date Of Birth: ${item.dateOfBirth?.toString(pattern = "dd-MM-yyyy")}   " +
+                    "\n| Account: ${item.account}           " +
+                    "\n| Balance: ${item.balance}            " +
+                    "\n| Address: ${item.address}           " +
                     "\n==================================="
             )
         }

@@ -7,9 +7,9 @@ class HistoryList {
         fun show(items: List<TransactionHistory>) {
             print("============ Tran =============")
             for(item in items) {
-                println("\n| From Account : ${item.FromAccount}     " +
-                        "\n| To Account: ${item.ToAccount}          " +
-                        "\n| Amount: ${item.Amount}$                " +
+                println("\n| From Account : ${item.fromAccount}     " +
+                        "\n| To Account: ${item.toAccount}          " +
+                        "\n| Amount: ${item.amount}$                " +
                         "\n======================================")
             }
         }

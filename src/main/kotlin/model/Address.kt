@@ -1,9 +1,9 @@
 package model
 
 data class Address (
-    var StreetNumber: String?,
-    var UnitNumber: String?,
-    var District: String?,
-    var Commune: String?,
-    var City: String?
+    var streetNumber: String?,
+    var unitNumber: String?,
+    var district: String?,
+    var commune: String?,
+    var city: String?
     )

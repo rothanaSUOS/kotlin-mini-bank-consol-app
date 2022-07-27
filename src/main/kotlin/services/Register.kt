@@ -1,5 +1,7 @@
 package services
 
+import common.Extension.input
+import common.Extension.toString
 import model.Address
 import model.Customer
 import model.Gender
@@ -11,13 +13,13 @@ class Register {
         private val dateFormat : DateTimeFormatter? = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         fun registerAccount(): Customer {
             println("Please input customer info: ")
-            var name = services.InputField.input("Name: ")
+
+            val name = services.InputField.input("Name: ")
             var gender = services.InputField.input("Gender=> MALE or FEMALE: ")?.uppercase().toString()
             while (Gender.values().find { it.name == gender } == null){
                 println("Your gender out of this world! Choose one in this world.")
                 gender = services.InputField.input("Gender=> MALE or FEMALE: ")?.uppercase().toString()
             }
-
             var dateOfBirth = services.InputField.input("Date of birth(dd-MM-yyyy): ").toString()
             while (!isValidDate(dateOfBirth)){
                 println("Your date of birth is invalid format!")

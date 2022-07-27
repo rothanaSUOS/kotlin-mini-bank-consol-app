@@ -1,5 +1,6 @@
 package services
 
+import common.Extension.toString
 import model.Customer
 
 class CustomerInfo {
@@ -8,7 +9,7 @@ class CustomerInfo {
             println("========== Customer info ==========" +
                     "\n| Name: ${item.Name}                   " +
                     "\n| Gender: ${item.Gender}               " +
-                    "\n| Date Of Birth: ${item.DateOfBirth}   " +
+                    "\n| Date Of Birth: ${item.DateOfBirth?.toString(pattern = "dd-MM-yyyy")}   " +
                     "\n| Account: ${item.Account}           " +
                     "\n| Balance: ${item.Balance}            " +
                     "\n| Address: ${item.Address}           " +
